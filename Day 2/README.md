@@ -69,7 +69,6 @@ To examine the sky130_fd_sc_hd__tt_025C_1v80.lib file content:
    gvim sky130_fd_sc_hd__tt_025C_1v80.lib
    ```
 
-
 ---
 
 ## Synthesis Methodologies Comparison
@@ -90,8 +89,8 @@ To examine the sky130_fd_sc_hd__tt_025C_1v80.lib file content:
 - Additional configuration required for comprehensive reporting
 
 **Visual Example:**
-![Hierarchical Synthesis Result](<img width="1271" height="791" alt="hierarchical" src="https://github.com/user-attachments/assets/cf54d5d8-a0ca-4b42-939d-18cd4b13a8ca" />
-)
+![Hierarchical Synthesis Result] <img width="1271" height="791" alt="hierarchical" src="https://github.com/user-attachments/assets/55903beb-1585-448e-a6c0-74d99303cfcb" />
+
 
 ---
 
@@ -111,8 +110,8 @@ To examine the sky130_fd_sc_hd__tt_025C_1v80.lib file content:
 - Increased memory requirements and netlist complexity
 
 **Visual Example:**
-![Flattened Synthesis Result](<img width="1277" height="797" alt="flatten" src="https://github.com/user-attachments/assets/18605b3a-770c-4503-a60e-b8a6b8eb25ca" />
-)
+![Flattened Synthesis Result]<img width="1277" height="797" alt="flatten" src="https://github.com/user-attachments/assets/0455c10f-ea3b-4994-a190-b6b34cbf981a" />
+
 
 > **Key Insight:** Hierarchical synthesis preserves design modularity while flattening creates optimized single-level implementations.
 
@@ -151,7 +150,8 @@ Sub-module level synthesis offers several compelling advantages in digital desig
 - Provides module-specific timing and area reports for detailed analysis
 - Enables targeted optimization of critical design components
 
-![Sub-module Synthesis Benefits](https://via.placeholder.com/600x300/4285f4/ffffff?text=Sub-module+Synthesis+Benefits)
+![Sub-module Synthesis Benefits] <img width="876" height="790" alt="submodule_1" src="https://github.com/user-attachments/assets/c6584558-a6da-41aa-abf5-82d5cb069e8d" />
+
 
 ---
 
@@ -197,11 +197,11 @@ endmodule
 - **Immediate Reset Action**: Reset signal overrides clock, clearing output instantly
 - **Clock-Edge Triggered**: Data capture occurs on rising clock transition when reset is inactive
 
-![Async Reset DFF Simulation](<img width="1267" height="605" alt="gtkwave_asyncres" src="https://github.com/user-attachments/assets/947abeca-a667-4a9e-b16f-3104c5cf9486" />
-)
+![Async Reset DFF Simulation] <img width="1267" height="605" alt="gtkwave_asyncres" src="https://github.com/user-attachments/assets/92053819-b9df-4b56-a264-aaa135aba393" />
 
-![Async Reset DFF Netlist](<img width="1277" height="650" alt="dff_asyncres" src="https://github.com/user-attachments/assets/5d4eebe9-1bd3-4348-8e30-29ebe2e8fc3a" />
-)
+
+![Async Reset DFF Netlist] <img width="1277" height="650" alt="dff_asyncres" src="https://github.com/user-attachments/assets/b4d5cfdf-2615-4de3-ab88-d511ccd9da7d" />
+
 
 ### D Flip-Flop with Asynchronous Set
 
@@ -219,11 +219,10 @@ endmodule
 - **Immediate Set Action**: Set signal overrides clock, forcing output to logic high instantly
 - **Priority Operation**: Asynchronous set takes precedence over data input
 
-![Async Set DFF Simulation](<img width="1211" height="541" alt="gtkwave_async_set" src="https://github.com/user-attachments/assets/6d9553d9-a805-4ab8-ba66-c9fae397810b" />
-)
+![Async Set DFF Simulation] <img width="1211" height="541" alt="gtkwave_async_set" src="https://github.com/user-attachments/assets/42d201f1-dfcf-464a-af19-f90723fd22ed" />
 
-![Async Set DFF Netlist](<img width="1277" height="678" alt="dff_async_set" src="https://github.com/user-attachments/assets/b541f7cc-d05b-4824-bfd0-4cd2e6c16153" />
-)
+
+![Async Set DFF Netlist] <img width="1277" height="678" alt="dff_async_set" src="https://github.com/user-attachments/assets/761b62e8-60b9-4d6b-b132-324f72b3acde" />
 
 ### D Flip-Flop with Synchronous Reset
 
@@ -241,11 +240,11 @@ endmodule
 - **Clock-Dependent Reset**: Reset operation synchronized with clock edge
 - **Controlled Timing**: Reset action occurs only during active clock transitions
 
-![Sync Reset DFF Simulation](<img width="1258" height="550" alt="gtkwave_syncres" src="https://github.com/user-attachments/assets/e1d45406-a0d5-4e1f-a6e2-5421a7207272" />
-)
+![Sync Reset DFF Simulation] <img width="1258" height="550" alt="gtkwave_syncres" src="https://github.com/user-attachments/assets/b34a806f-ad04-4106-9418-5ecbd807a084" />
 
-![Sync Reset DFF Netlist](<img width="1291" height="667" alt="dff_syncres" src="https://github.com/user-attachments/assets/ba4c87a6-9ab3-45cf-a618-0f737f531652" />
-)
+
+![Sync Reset DFF Netlist] <img width="1291" height="667" alt="dff_syncres" src="https://github.com/user-attachments/assets/bf77f9c3-0acf-494f-bb35-10a3a0cc8a2d" />
+
 
 ---
 
@@ -265,8 +264,8 @@ endmodule
 **Synthesis Optimization:**
 The tool automatically converts `a * 2` to `{a, 1'b0}` - simply appending a zero bit!
 
-![Multiply by 2 Netlist](<img width="732" height="706" alt="mul_2" src="https://github.com/user-attachments/assets/8e37422b-0b55-40c8-a920-8189b1f7d5b4" />
-)
+![Multiply by 2 Netlist] <img width="732" height="706" alt="mul_2" src="https://github.com/user-attachments/assets/6ac40cf7-0f74-4f7e-810b-c808d9ad2292" />
+
 
 ### Multiply by 8 Optimization
 
@@ -282,8 +281,7 @@ endmodule
 **Synthesis Optimization:**
 The tool converts `a * 8` to `{a, 3'b000}` - appending three zero bits!
 
-![Multiply by 8 Netlist](<img width="941" height="745" alt="mul_8" src="https://github.com/user-attachments/assets/a0200715-d55a-462d-9630-8a9469a266ca" />
-)
+![Multiply by 8 Netlist] <img width="941" height="745" alt="mul_8" src="https://github.com/user-attachments/assets/99d2be8a-a641-4641-bb18-734567346eac" />
 
 These optimizations demonstrate how synthesis tools recognize mathematical patterns and implement them using simple wire connections rather than complex multiplier circuits.
 
@@ -306,8 +304,8 @@ These optimizations demonstrate how synthesis tools recognize mathematical patte
    gtkwave tb_dff_asyncres.vcd
    ```
 
-![GTKWave Simulation Results](<img width="1267" height="605" alt="gtkwave_asyncres" src="https://github.com/user-attachments/assets/428ea770-78a4-4eb0-bc97-af57143062f9" />
-)
+![GTKWave Simulation Results] <img width="1267" height="605" alt="gtkwave_asyncres" src="https://github.com/user-attachments/assets/28e2202d-458b-439a-a6c3-eb67aebfa3ed" />
+
 
 ### Logic Synthesis Using Yosys
 
@@ -340,8 +338,7 @@ These optimizations demonstrate how synthesis tools recognize mathematical patte
    show
    ```
 
-![Yosys Synthesis Output](<img width="1277" height="650" alt="dff_asyncres" src="https://github.com/user-attachments/assets/8192d211-cbb1-4d44-b9ba-52a93290089e" />
-)
+![Yosys Synthesis Output] <img width="1277" height="650" alt="dff_asyncres" src="https://github.com/user-attachments/assets/d9b6877f-dda5-4207-88c1-38a71d2a2015" />
 
 ---
 
@@ -352,6 +349,12 @@ These optimizations demonstrate how synthesis tools recognize mathematical patte
 ✅ **Sequential Design:** Proficiency in flip-flop coding techniques for various reset/set requirements  
 ✅ **Optimization Awareness:** Recognition of synthesis tool optimization capabilities  
 ✅ **Complete Flow:** End-to-end experience from RTL to gate-level implementation
+
+---
+*"I don't get lucky. I make my own luck... and my own netlists."* ⚡
+
+---
+
 
 
 ---
