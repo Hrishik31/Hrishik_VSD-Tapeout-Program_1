@@ -17,8 +17,8 @@ Welcome to **Day 3** of the RTL Design Workshop! This session focuses on advance
   - [Laboratory 4: Complex Ternary Expression Reduction](#laboratory-4-complex-ternary-expression-reduction)
   - [Laboratory 5: Sequential Constant Loading](#laboratory-5-sequential-constant-loading)
   - [Laboratory 6: Constant Output Sequential Logic](#laboratory-6-constant-output-sequential-logic)
-  - [Laboratory 7: Multiple Module Optimization](#laboratory-7-multiple-module-optimization)
-  - [Laboratory 8: Hierarchical Module Optimization](#laboratory-8-hierarchical-module-optimization)
+  - [Laboratory 7: Multiple Module Optimization 1](#laboratory-7-multiple-module-optimization-1)
+  - [Laboratory 8: Multiple Module Optimization 2](#laboratory-8-multiple-module-optimization-2)
 
 ---
 
