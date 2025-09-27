@@ -32,8 +32,7 @@ Your **design** represents the Verilog HDL code that describes the desired digit
 A **testbench** creates a controlled simulation environment that generates input patterns for your design and validates the corresponding output responses.
 
 <div align="center">
-  <img width="1040" height="712" alt="GTK wave good_mux v" src="https://github.com/user-attachments/assets/4e9afc35-83cb-4e39-a0a4-e6572265127e" />
-
+  <img src="https://github.com/user-attachments/assets/93927b96-df80-4da5-b801-284fc2cc6757" alt="Design & Testbench Architecture" width="70%">
 </div>
 
 ---
@@ -198,8 +197,5 @@ Let's synthesize our `good_mux` design using the Yosys synthesis engine!
 
 ---
 
-
-
----
 
 *Happy Designing! 🎛️⚡*
