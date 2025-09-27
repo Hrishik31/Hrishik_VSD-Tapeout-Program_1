@@ -89,7 +89,8 @@ gtkwave tb_good_mux.vcd
 ```
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/701e8189-3101-4a82-8134-e799521b9a8b" alt="GTKWave Waveform Display" width="70%">
+  <img width="1040" height="712" alt="GTK wave good_mux v" src="https://github.com/user-attachments/assets/81e041a9-123c-4247-af28-6f0598460992" />
+
 </div>
 
 ---
@@ -182,7 +183,8 @@ Let's synthesize our `good_mux` design using the Yosys synthesis engine!
     ```
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/4b3a9939-92d0-4efc-ad69-e96faf19e6c3" alt="Synthesized Gate-Level Circuit" width="70%">
+  <img width="702" height="747" alt="Netlist" src="https://github.com/user-attachments/assets/4d5b4d4f-0e0f-4240-91ea-786f7d7f40ae" />
+
 </div>
 
 ---
