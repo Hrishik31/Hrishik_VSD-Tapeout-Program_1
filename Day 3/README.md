@@ -104,12 +104,8 @@ opt_clean -purge
 
 
 **Yosys Netlist Visualization:**
+
 <img width="1225" height="782" alt="opt_check" src="https://github.com/user-attachments/assets/49171d3c-be53-4d7e-ac02-1699b1e070fe" />
-
-
-
-
-
 ---
 
 ### Laboratory 2: Inverted Logic Optimization
@@ -128,11 +124,11 @@ endmodule
   - `y = b` when `a` is deasserted (false)
 - Optimizes to: `y = a | b` (OR gate implementation)
 
-
+**GTKWave Simulation Results:**
+![Lab 2 GTKWave Output](placeholder-lab2-gtkwave.png)
 
 **Yosys Netlist Visualization:**
-<img width="1283" height="817" alt="opt_check2" src="https://github.com/user-attachments/assets/8a0c8e4d-1da1-46ba-bf0c-404bb8a4913a" />
-
+![Lab 2 Synthesis Output](https://github.com/user-attachments/assets/59545745-8a8b-4afd-b4d5-0a3ad1d5b80e)
 
 ---
 
@@ -153,10 +149,11 @@ endmodule
   - When `a = 1` and `c = 1`, output `y = b`
 - Simplifies to three-input AND gate: `y = a & b & c`
 
+**GTKWave Simulation Results:**
+![Lab 3 GTKWave Output](placeholder-lab3-gtkwave.png)
 
 **Yosys Netlist Visualization:**
-<img width="1277" height="786" alt="opt_check3" src="https://github.com/user-attachments/assets/290ca679-e384-4be9-921f-f4631dfc6dbc" />
-
+![Lab 3 Synthesis Output](https://github.com/user-attachments/assets/157b16d3-cecd-441a-aacf-bae296910886)
 
 ---
 
@@ -177,15 +174,17 @@ endmodule
   - If `a = 0`: `y = !c` (complement of `c`)
 - Optimization reduces to: `y = a ? c : !c`
 
-
+**GTKWave Simulation Results:**
+![Lab 4 GTKWave Output](placeholder-lab4-gtkwave.png)
 
 **Yosys Netlist Visualization:**
-<img width="1291" height="791" alt="opt_check4" src="https://github.com/user-attachments/assets/2da4be0a-b3f0-4e5f-b767-16dd51cb13d6" />
-
+![Lab 4 Synthesis Output](https://github.com/user-attachments/assets/08d1e447-78c6-47c4-8c99-239645b38617)
 
 ---
 
 ### Laboratory 5: Sequential Constant Loading
+
+#### 5a. Basic Constant Loading DFF
 
 **Verilog Implementation:**
 
@@ -208,12 +207,117 @@ endmodule
 - Optimization potential: Can be simplified since data input is constant
 
 **GTKWave Simulation Results:**
-<img width="1282" height="422" alt="gtkwave_dff_const1" src="https://github.com/user-attachments/assets/280d8fc5-ac1b-4020-8e65-e7a7015c03e6" />
-
+![Lab 5a GTKWave Output](placeholder-lab5a-gtkwave.png)
 
 **Yosys Netlist Visualization:**
-<img width="1221" height="657" alt="dff_const1" src="https://github.com/user-attachments/assets/97f5d675-4ab3-48cb-b248-8626730a30cf" />
+![Lab 5a Synthesis Output](https://github.com/user-attachments/assets/a42fac06-a092-4efc-be39-33b263caaaa1)
 
+#### 5b. Multi-Stage Constant DFF
+
+**Verilog Implementation:**
+
+```verilog
+module dff_const4(input clk, input reset, output reg q1, q);
+    always @(posedge clk, posedge reset)
+    begin
+        if(reset)
+        begin
+            q1 <= 1'b1;
+            q <= 1'b1;
+        end
+        else
+        begin
+            q1 <= 1'b1;
+            q <= q1;
+        end
+    end
+endmodule
+```
+
+**Sequential Analysis:**
+- Two-stage flip-flop configuration with constant loading:
+  - Both `q1` and `q` reset to logic high (1)
+  - `q1` always loads constant 1, `q` follows `q1`
+  - Since `q1` is always 1, `q` will also be 1 after first clock cycle
+- Optimization: Both outputs become constant high after reset deassertion
+
+**GTKWave Simulation Results:**
+![Lab 5b GTKWave Output](placeholder-lab5b-gtkwave.png)
+
+**Yosys Netlist Visualization:**
+![Lab 5b Synthesis Output](Image1-dff_const4-netlist.png)
+
+#### 5c. Cascaded Constant DFF Chain
+
+**Verilog Implementation:**
+
+```verilog
+module dff_const5(input clk, input reset, output reg q1, q);
+    always @(posedge clk, posedge reset)
+    begin
+        if(reset)
+        begin
+            q1 <= 1'b0;
+            q <= 1'b0;
+        end
+        else
+        begin
+            q1 <= 1'b1;
+            q <= q1;
+        end
+    end
+    endmodule
+```
+
+**Functional Description:**
+- Cascaded flip-flop pair with mixed reset/load behavior:
+  - Reset state: Both `q1` and `q` initialize to 0
+  - Clock cycle 1: `q1` loads 1, `q` loads previous `q1` (0)
+  - Clock cycle 2: `q1` remains 1, `q` loads current `q1` (1)
+  - Steady state: Both outputs remain at logic high
+- Optimization: After two clock cycles, both become constant 1
+
+**GTKWave Simulation Results:**
+![Lab 5c GTKWave Output](placeholder-lab5c-gtkwave.png)
+
+**Yosys Netlist Visualization:**
+![Lab 5c Synthesis Output](Image2-dff_const5-netlist.png)
+
+#### 5d. Advanced Sequential Constant Logic
+
+**Verilog Implementation:**
+
+```verilog
+module dff_const3(input clk, input reset, output reg q1, q);
+    always @(posedge clk, posedge reset)
+    begin
+        if(reset)
+        begin
+            q1 <= 1'b1;
+            q <= 1'b0;
+        end
+        else
+        begin
+            q1 <= 1'b1;
+            q <= q1;
+        end
+    end
+endmodule
+```
+
+**Behavioral Analysis:**
+- Asymmetric reset behavior with constant propagation:
+  - Reset: `q1` initializes to 1, `q` initializes to 0
+  - Normal operation: `q1` maintains constant 1, `q` tracks `q1`
+  - After first clock edge: `q` becomes 1 (follows `q1`)
+  - Steady state: Both outputs constant high
+- Synthesis optimization: Eliminates sequential logic for constant behavior
+
+**GTKWave Simulation Results:**
+![Lab 5d GTKWave Output](placeholder-lab5d-gtkwave.png)
+
+**Yosys Netlist Visualization:**
+![Lab 5d Synthesis Output](Image3-dff_const3-netlist.png)
 
 ---
 
@@ -239,16 +343,14 @@ endmodule
 - Synthesis optimization eliminates sequential logic, replacing with constant driver
 
 **GTKWave Simulation Results:**
-<img width="998" height="485" alt="gtkwave_dff_const2" src="https://github.com/user-attachments/assets/7945cd2d-5714-461f-bcb1-849dbaa14766" />
-
+![Lab 6 GTKWave Output](placeholder-lab6-gtkwave.png)
 
 **Yosys Netlist Visualization:**
-<img width="1231" height="775" alt="dff_const2" src="https://github.com/user-attachments/assets/0a65f7e1-1add-49a2-ac34-eaa52532e979" />
-
+![Lab 6 Synthesis Output](https://github.com/user-attachments/assets/ae45f7db-0a7f-4256-b43b-01cc4a1588f7)
 
 ---
 
-### Laboratory 7: Multiple Module Optimization 1
+### Laboratory 7: Multiple Module Optimization
 
 **Verilog Implementation:**
 
@@ -274,18 +376,18 @@ endmodule
 - Instance U3: `n3 = n2 & d = b & c & d`  
 - Instance U4: `y = n1 & n3 = a & b & c & d`
 
+**GTKWave Simulation Results:**
+![Lab 7 GTKWave Output](placeholder-lab7-gtkwave.png)
 
 **Yosys Netlist Visualization (Flattened):**
-<img width="1218" height="652" alt="multiple_module_opt_flat" src="https://github.com/user-attachments/assets/9e1815fc-3532-4e5e-9385-48693bb3c725" />
-
+![Lab 7 Flattened Synthesis](placeholder-lab7-flattened.png)
 
 **Yosys Netlist Visualization (Hierarchical):**
-<img width="1236" height="670" alt="multiple_module_opt_hier" src="https://github.com/user-attachments/assets/23b89c1d-a04a-40e5-be7b-0e3d9013b376" />
-
+![Lab 7 Hierarchical Synthesis](placeholder-lab7-hierarchical.png)
 
 ---
 
-### Laboratory 8: Multiple Module Optimization 2
+### Laboratory 8: Hierarchical Module Optimization
 
 **Verilog Implementation:**
 
@@ -311,15 +413,11 @@ endmodule
 - Instance U4: `y = n1 & n3 = 0 & n3 = 0`
 - Final optimization: `y = 0` (constant output)
 
+**GTKWave Simulation Results:**
+![Lab 8 GTKWave Output](placeholder-lab8-gtkwave.png)
 
-
-**Yosys Netlist Visualization (Flattened):**
-<img width="1232" height="212" alt="multiple_module_opt2_flat" src="https://github.com/user-attachments/assets/8eed239f-647c-4f40-8db0-57e51b59e14b" />
-
-**Yosys Netlist Visualization (Hierarchical):**
-<img width="1245" height="712" alt="multiple_module_opt2_hier" src="https://github.com/user-attachments/assets/243c99f9-2788-4b65-9981-e2b8e956b14a" />
-
-
+**Yosys Netlist Visualization:**
+![Lab 8 Synthesis Output](placeholder-lab8-synthesis.png)
 
 ---
 
