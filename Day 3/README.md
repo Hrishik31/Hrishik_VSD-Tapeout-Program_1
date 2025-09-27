@@ -124,11 +124,11 @@ endmodule
   - `y = b` when `a` is deasserted (false)
 - Optimizes to: `y = a | b` (OR gate implementation)
 
-**GTKWave Simulation Results:**
-![Lab 2 GTKWave Output](placeholder-lab2-gtkwave.png)
+
 
 **Yosys Netlist Visualization:**
-![Lab 2 Synthesis Output](https://github.com/user-attachments/assets/59545745-8a8b-4afd-b4d5-0a3ad1d5b80e)
+
+<img width="1283" height="817" alt="opt_check2" src="https://github.com/user-attachments/assets/8a0c8e4d-1da1-46ba-bf0c-404bb8a4913a" />
 
 ---
 
@@ -149,11 +149,11 @@ endmodule
   - When `a = 1` and `c = 1`, output `y = b`
 - Simplifies to three-input AND gate: `y = a & b & c`
 
-**GTKWave Simulation Results:**
-![Lab 3 GTKWave Output](placeholder-lab3-gtkwave.png)
+
 
 **Yosys Netlist Visualization:**
-![Lab 3 Synthesis Output](https://github.com/user-attachments/assets/157b16d3-cecd-441a-aacf-bae296910886)
+
+<img width="1277" height="786" alt="opt_check3" src="https://github.com/user-attachments/assets/290ca679-e384-4be9-921f-f4631dfc6dbc" />
 
 ---
 
@@ -174,11 +174,11 @@ endmodule
   - If `a = 0`: `y = !c` (complement of `c`)
 - Optimization reduces to: `y = a ? c : !c`
 
-**GTKWave Simulation Results:**
-![Lab 4 GTKWave Output](placeholder-lab4-gtkwave.png)
+
 
 **Yosys Netlist Visualization:**
-![Lab 4 Synthesis Output](https://github.com/user-attachments/assets/08d1e447-78c6-47c4-8c99-239645b38617)
+
+<img width="1291" height="791" alt="opt_check4" src="https://github.com/user-attachments/assets/2da4be0a-b3f0-4e5f-b767-16dd51cb13d6" />
 
 ---
 
@@ -207,10 +207,12 @@ endmodule
 - Optimization potential: Can be simplified since data input is constant
 
 **GTKWave Simulation Results:**
-![Lab 5a GTKWave Output](placeholder-lab5a-gtkwave.png)
+<img width="1282" height="422" alt="gtkwave_dff_const1" src="https://github.com/user-attachments/assets/280d8fc5-ac1b-4020-8e65-e7a7015c03e6" />
+
 
 **Yosys Netlist Visualization:**
-![Lab 5a Synthesis Output](https://github.com/user-attachments/assets/a42fac06-a092-4efc-be39-33b263caaaa1)
+<img width="1221" height="657" alt="dff_const1" src="https://github.com/user-attachments/assets/97f5d675-4ab3-48cb-b248-8626730a30cf" />
+
 
 #### 5b. Multi-Stage Constant DFF
 
@@ -242,10 +244,13 @@ endmodule
 - Optimization: Both outputs become constant high after reset deassertion
 
 **GTKWave Simulation Results:**
-![Lab 5b GTKWave Output](placeholder-lab5b-gtkwave.png)
+<img width="1278" height="796" alt="gtkwave_dff_const3" src="https://github.com/user-attachments/assets/9770a0ea-6636-4d24-b31d-3008b55e49ab" />
+
+
 
 **Yosys Netlist Visualization:**
-![Lab 5b Synthesis Output](Image1-dff_const4-netlist.png)
+<img width="1300" height="637" alt="dff_const3" src="https://github.com/user-attachments/assets/27652d4e-fe5a-4389-83f6-e6423bc94bf6" />
+
 
 #### 5c. Cascaded Constant DFF Chain
 
@@ -278,10 +283,12 @@ module dff_const5(input clk, input reset, output reg q1, q);
 - Optimization: After two clock cycles, both become constant 1
 
 **GTKWave Simulation Results:**
-![Lab 5c GTKWave Output](placeholder-lab5c-gtkwave.png)
+<img width="1292" height="583" alt="gtkwave_dff_const4" src="https://github.com/user-attachments/assets/15f57845-358e-4591-b623-8e14d8b22400" />
+
 
 **Yosys Netlist Visualization:**
-![Lab 5c Synthesis Output](Image2-dff_const5-netlist.png)
+<img width="733" height="725" alt="dff_const4" src="https://github.com/user-attachments/assets/25f00c7c-42ca-4e3f-ab0f-ca632acb8b69" />
+
 
 #### 5d. Advanced Sequential Constant Logic
 
@@ -314,10 +321,12 @@ endmodule
 - Synthesis optimization: Eliminates sequential logic for constant behavior
 
 **GTKWave Simulation Results:**
-![Lab 5d GTKWave Output](placeholder-lab5d-gtkwave.png)
+<img width="1277" height="606" alt="gtkwave_dff_const5" src="https://github.com/user-attachments/assets/9c7c2bae-7703-49cb-b7ac-14d5cf7a7759" />
+
 
 **Yosys Netlist Visualization:**
-![Lab 5d Synthesis Output](Image3-dff_const3-netlist.png)
+<img width="1218" height="418" alt="dff_const5" src="https://github.com/user-attachments/assets/956ddd02-c4c6-4e50-9be0-834252b20634" />
+
 
 ---
 
@@ -343,14 +352,16 @@ endmodule
 - Synthesis optimization eliminates sequential logic, replacing with constant driver
 
 **GTKWave Simulation Results:**
-![Lab 6 GTKWave Output](placeholder-lab6-gtkwave.png)
+<img width="998" height="485" alt="gtkwave_dff_const2" src="https://github.com/user-attachments/assets/7945cd2d-5714-461f-bcb1-849dbaa14766" />
+
 
 **Yosys Netlist Visualization:**
-![Lab 6 Synthesis Output](https://github.com/user-attachments/assets/ae45f7db-0a7f-4256-b43b-01cc4a1588f7)
+<img width="1231" height="775" alt="dff_const2" src="https://github.com/user-attachments/assets/0a65f7e1-1add-49a2-ac34-eaa52532e979" />
+
 
 ---
 
-### Laboratory 7: Multiple Module Optimization
+### Laboratory 7: Multiple Module Optimization 1
 
 **Verilog Implementation:**
 
@@ -376,18 +387,18 @@ endmodule
 - Instance U3: `n3 = n2 & d = b & c & d`  
 - Instance U4: `y = n1 & n3 = a & b & c & d`
 
-**GTKWave Simulation Results:**
-![Lab 7 GTKWave Output](placeholder-lab7-gtkwave.png)
-
 **Yosys Netlist Visualization (Flattened):**
-![Lab 7 Flattened Synthesis](placeholder-lab7-flattened.png)
+<img width="1218" height="652" alt="multiple_module_opt_flat" src="https://github.com/user-attachments/assets/9e1815fc-3532-4e5e-9385-48693bb3c725" />
+
 
 **Yosys Netlist Visualization (Hierarchical):**
-![Lab 7 Hierarchical Synthesis](placeholder-lab7-hierarchical.png)
+<img width="1236" height="670" alt="multiple_module_opt_hier" src="https://github.com/user-attachments/assets/23b89c1d-a04a-40e5-be7b-0e3d9013b376" />
+
+
 
 ---
 
-### Laboratory 8: Hierarchical Module Optimization
+### Laboratory 8: Multiple Module Optimization 2
 
 **Verilog Implementation:**
 
@@ -413,11 +424,13 @@ endmodule
 - Instance U4: `y = n1 & n3 = 0 & n3 = 0`
 - Final optimization: `y = 0` (constant output)
 
-**GTKWave Simulation Results:**
-![Lab 8 GTKWave Output](placeholder-lab8-gtkwave.png)
+  
+**Yosys Netlist Visualization (Flattened):**
+<img width="1232" height="212" alt="multiple_module_opt2_flat" src="https://github.com/user-attachments/assets/8eed239f-647c-4f40-8db0-57e51b59e14b" />
 
-**Yosys Netlist Visualization:**
-![Lab 8 Synthesis Output](placeholder-lab8-synthesis.png)
+**Yosys Netlist Visualization (Hierarchical):**
+<img width="1245" height="712" alt="multiple_module_opt2_hier" src="https://github.com/user-attachments/assets/243c99f9-2788-4b65-9981-e2b8e956b14a" />
+
 
 ---
 
