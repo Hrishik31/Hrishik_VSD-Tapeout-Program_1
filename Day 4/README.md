@@ -170,7 +170,8 @@ endmodule
 - Output `y` equals `i0` when `sel` is low
 
 **RTL Simulation Results:**
-![RTL Simulation](https://github.com/user-attachments/assets/7afb734a-abbb-47a6-ab99-a368f09951f2)
+<img width="1277" height="780" alt="gtkwave_ternary_operator_mux" src="https://github.com/user-attachments/assets/a24cac17-78fb-4127-94fb-1605adada85e" />
+
 
 ---
 
@@ -185,7 +186,8 @@ endmodule
 4. Analyze synthesis reports
 
 **Synthesis Results:**
-![Synthesis Output](https://github.com/user-attachments/assets/d524973e-686a-4775-904e-b4b3d666508b)
+<img width="1278" height="632" alt="ternary_operator_mux" src="https://github.com/user-attachments/assets/f014420b-b66b-4523-a328-2ccfd2944a06" />
+
 
 ---
 
@@ -199,7 +201,8 @@ iverilog <library_path>/primitives.v <library_path>/sky130_fd_sc_hd.v ternary_op
 ```
 
 **GLS Verification Results:**
-![GLS Simulation](https://github.com/user-attachments/assets/e3816ae1-9dd4-4a39-8f16-477b186e663b)
+<img width="1280" height="785" alt="gtkwave_ternary_operator_mux_GLS" src="https://github.com/user-attachments/assets/4939c878-bc56-4094-a58e-ef2b94491170" />
+
 
 ---
 
@@ -235,7 +238,8 @@ end
 ```
 
 **RTL Simulation of Flawed Design:**
-![Bad MUX RTL](https://github.com/user-attachments/assets/9b87fa93-eaf4-4367-ad91-36b813dc6b59)
+<img width="1211" height="757" alt="gtk_wave_bad_mux" src="https://github.com/user-attachments/assets/3a896c02-871a-4350-8b26-725fc9537883" />
+
 
 ---
 
@@ -246,7 +250,8 @@ end
 **Expected Outcome:** Simulation discrepancies due to coding issues
 
 **GLS Results for Flawed Design:**
-![Bad MUX GLS](https://github.com/user-attachments/assets/a5905017-d7a0-4138-b7d6-64668fe18813)
+<img width="1147" height="722" alt="gtk_wave_bad_mux_syn_mismatch" src="https://github.com/user-attachments/assets/bdf05b5e-769c-4759-a742-5777428980d9" />
+
 
 ---
 
@@ -279,7 +284,8 @@ end
 ```
 
 **RTL Simulation Results:**
-![Blocking Caveat RTL](https://github.com/user-attachments/assets/4dee1fc1-eb02-420d-a851-b85b58535428)
+<img width="1291" height="628" alt="gtkwave_blocking_caveat" src="https://github.com/user-attachments/assets/fed4f7c3-7c70-4573-97ca-bbb9ed8a774b" />
+
 
 ---
 
@@ -293,7 +299,8 @@ end
 - Examine optimization results
 
 **Synthesis Results:**
-![Blocking Caveat Synthesis](https://github.com/user-attachments/assets/52b19282-a954-4eff-a8ef-b4924dd890d6)
+<img width="771" height="531" alt="blocking_caveat" src="https://github.com/user-attachments/assets/98ff4f41-2b7b-4337-bcc9-dd4bd7a7b30e" />
+
 
 ---
 
@@ -317,7 +324,8 @@ iverilog <library_path>/primitives.v <library_path>/sky130_fd_sc_hd.v blocking_c
 ```
 
 **GLS Waveform Results:**
-![Blocking Caveat GLS](placeholder_gls_blocking_caveat.png)
+<img width="1262" height="760" alt="gtkwave_blocking_caveat_GLS" src="https://github.com/user-attachments/assets/2f8c1af2-6497-495f-b728-ad0287fa7d1a" />
+
 
 **Analysis Notes:**
 - Compare signal transitions between RTL and GLS
