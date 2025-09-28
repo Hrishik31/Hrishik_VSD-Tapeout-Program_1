@@ -1,5 +1,8 @@
 # Day 1: Fundamentals of Verilog RTL Design & Logic Synthesis
 
+[![RISC-V](https://img.shields.io/badge/RISC--V-Digital%20Design-blue?style=for-the-badge&logo=riscv)](https://riscv.org/)
+[![Workshop](https://img.shields.io/badge/RTL-Workshop-orange?style=for-the-badge)](https://vsdiat.vlsisystemdesign.com/)
+![Day](https://img.shields.io/badge/Day-1-green?style=for-the-badge)
 Welcome to **Day 1** of your RTL Design Journey!  
 Today marks the beginning of your exploration into digital circuit design through Verilog HDL, open-source simulation using **Icarus Verilog (iverilog)**, and fundamental logic synthesis concepts with **Yosys**. This comprehensive guide provides hands-on laboratories, core principles, and detailed explanations to establish a solid foundation in RTL methodology.
 
