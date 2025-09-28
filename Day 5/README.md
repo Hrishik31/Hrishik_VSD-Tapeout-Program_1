@@ -1,519 +1,554 @@
-# Day 5: Advanced Verilog Constructs for Synthesizable RTL Design
+# Day 5: Synthesis Optimization & Advanced Verilog Coding Techniques
 
 [![RISC-V](https://img.shields.io/badge/RISC--V-Digital%20Design-blue?style=for-the-badge&logo=riscv)](https://riscv.org/)
 [![Workshop](https://img.shields.io/badge/RTL-Workshop-orange?style=for-the-badge)](https://vsdiat.vlsisystemdesign.com/)
 ![Day](https://img.shields.io/badge/Day-5-green?style=for-the-badge)
 
-This session explores advanced Verilog constructs essential for creating efficient, synthesizable RTL designs. We delve into conditional statements, iterative constructs, and parameterizable hardware generation while addressing common pitfalls that lead to unintended circuit behavior.
+Welcome to **Day 5** of the RTL Design Workshop! This session emphasizes the critical importance of writing synthesizable, optimized Verilog code. We explore advanced constructs including conditional statements, iterative structures, and parametric generation while addressing common pitfalls that lead to synthesis issues.
 
 ---
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [1. Conditional Logic Implementation](#1-conditional-logic-implementation)
-  - [If-Else Statement Fundamentals](#if-else-statement-fundamentals)
-  - [Case Statement Architecture](#case-statement-architecture)
-  - [Latch Inference Prevention](#latch-inference-prevention)
-
-- [2. Iterative Hardware Construction](#2-iterative-hardware-construction)
-  - [For Loop Applications](#for-loop-applications)
-  - [Generate Block Methodology](#generate-block-methodology)
-
-- [3. Practical Implementation Laboratories](#3-practical-implementation-laboratories)
-  - [Laboratory 1: Incomplete Conditional Logic](#laboratory-1-incomplete-conditional-logic)
-  - [Laboratory 2: Nested Conditional Structures](#laboratory-2-nested-conditional-structures)
-  - [Laboratory 3: Defective Case Implementation](#laboratory-3-defective-case-implementation)
-  - [Laboratory 4: Complete Case Design](#laboratory-4-complete-case-design)
-  - [Laboratory 5: Demultiplexer Using Case Logic](#laboratory-5-demultiplexer-using-case-logic)
-  - [Laboratory 6: Loop-Based Demultiplexer](#laboratory-6-loop-based-demultiplexer)
-  - [Laboratory 7: Incomplete Case Structure](#laboratory-7-incomplete-case-structure)
-  - [Laboratory 8: Multiplexer with Loop Logic](#laboratory-8-multiplexer-with-loop-logic)
-  - [Laboratory 9: Partial Assignment Handling](#laboratory-9-partial-assignment-handling)
-  - [Laboratory 10: Ripple Carry Adder Implementation](#laboratory-10-ripple-carry-adder-implementation)
-
-- [4. Design Best Practices](#4-design-best-practices)
+- [2. Synthesis Hazards: Inferred Latch Prevention](#2-synthesis-hazards-inferred-latch-prevention) 
+- [3. Iterative Constructs in Hardware Design](#3-iterative-constructs-in-hardware-design)
+- [4. Parametric Hardware Generation](#4-parametric-hardware-generation)
+- [5. Arithmetic Circuit Construction](#5-arithmetic-circuit-construction)
+- [6. Laboratory Implementations](#6-laboratory-implementations)
+- [7. Synthesis Optimization Strategies](#7-synthesis-optimization-strategies)
 
 ---
 
 ## 1. Conditional Logic Implementation
 
-### If-Else Statement Fundamentals
+Conditional statements form the backbone of control logic in digital systems. Proper implementation ensures predictable synthesis results and eliminates unintended storage elements.
 
-Conditional statements form the backbone of decision-making logic in RTL design. These constructs enable designers to implement multiplexers, control units, and state machines efficiently.
+### If-Else Statement Methodology
 
-**Basic Structure:**
+**Structured Conditional Logic:**
 ```verilog
 always @(*) begin
-    if (condition)
-        output <= value1;
+    if (condition1)
+        output = value1;
+    else if (condition2) 
+        output = value2;
     else
-        output <= value2;
+        output = default_value;  // Essential for combinational logic
 end
 ```
 
-**Key Design Principles:**
-- All execution paths must assign values to output signals
-- Incomplete assignments create unintentional storage elements
-- Priority encoding naturally emerges from if-else chains
+**Key Implementation Guidelines:**
+- Ensure complete signal assignment across all execution paths
+- Utilize sensitivity lists appropriately (`*` for combinational, clock edges for sequential)
+- Maintain consistent data types throughout conditional branches
+- Apply proper precedence understanding in nested conditions
 
-### Case Statement Architecture
+### Case Statement Best Practices
 
-Case statements provide efficient implementation of multi-way decision logic, typically synthesizing into optimized multiplexer structures.
-
-**Fundamental Template:**
+**Comprehensive Case Implementation:**
 ```verilog
 always @(*) begin
-    case(selector)
-        value1: output <= input1;
-        value2: output <= input2;
-        default: output <= default_value;
+    case (selector)
+        2'b00: output = input0;
+        2'b01: output = input1; 
+        2'b10: output = input2;
+        default: output = input3;  // Prevents latch inference
     endcase
 end
 ```
 
-**Implementation Guidelines:**
-- Default cases prevent incomplete specifications
-- Wildcard patterns require careful consideration
-- Parallel case analysis optimizes synthesis results
+---
 
-### Latch Inference Prevention
+## 2. Synthesis Hazards: Inferred Latch Prevention
 
-Latches represent unclocked storage elements that can introduce timing hazards and design complications. Understanding their formation mechanism is crucial for robust RTL design.
+Inferred latches represent one of the most common synthesis pitfalls, occurring when combinational logic inadvertently creates memory elements due to incomplete signal assignments.
 
-**Latch Formation Conditions:**
-- Incomplete signal assignments in combinational always blocks
-- Missing else clauses in conditional statements
-- Absent default cases in case constructs
+### Root Causes of Latch Inference
 
-**Prevention Strategies:**
-- Initialize all outputs in every execution path
-- Utilize default assignments before conditional logic
-- Employ explicit else and default constructs
+**Incomplete Assignment Scenarios:**
+- Missing else clauses in if-else structures
+- Absent default cases in case statements  
+- Partial signal assignments within conditional blocks
+- Undriven outputs in specific execution paths
+
+**Problematic Code Example:**
+```verilog
+// WARNING: Creates inferred latch!
+always @(*) begin
+    if (enable)
+        data_out = data_in;
+    // Missing else clause - synthesizer infers latch to hold previous value
+end
+```
+
+**Corrected Implementation:**
+```verilog
+// Proper combinational logic - no latch
+always @(*) begin
+    if (enable)
+        data_out = data_in;
+    else
+        data_out = 1'b0;  // Explicit assignment prevents latch
+end
+```
+
+### Latch Detection and Resolution
+
+**Synthesis Warning Indicators:**
+- "Inferring latch for signal" messages during synthesis
+- Unexpected timing paths in timing reports
+- Combinational loops in netlist analysis
+- Inconsistent simulation vs. synthesis behavior
 
 ---
 
-## 2. Iterative Hardware Construction
+## 3. Iterative Constructs in Hardware Design
 
-### For Loop Applications
+Hardware description languages support iterative constructs that enable efficient implementation of repetitive logic structures while maintaining synthesizability.
 
-For loops enable efficient description of repetitive hardware structures while maintaining synthesis compatibility when properly constrained.
+### For Loop Implementation Guidelines
 
-**Synthesis Requirements:**
-- Loop bounds must be compile-time constants
-- Iteration count determines hardware replication factor
-- Loop variables control connection patterns
+**Synthesizable Loop Requirements:**
+- Fixed iteration bounds determinable at compile time
+- Loop variables must be integers or genvars
+- No dynamic loop termination conditions
+- Consistent signal assignments within loop body
+
+**Practical For Loop Usage:**
+```verilog
+integer i;
+always @(*) begin
+    result = 0;
+    for (i = 0; i < WIDTH; i = i + 1) begin
+        if (i == select_index)
+            result = input_array[i];
+    end
+end
+```
+
+---
+
+## 4. Parametric Hardware Generation
+
+Generate constructs enable scalable, parameterized hardware designs that adapt to different specifications without manual code duplication.
 
 ### Generate Block Methodology
 
-Generate constructs facilitate parametric hardware instantiation, enabling scalable and reusable design architectures.
+**Compile-Time Hardware Generation:**
+- Parameter-driven module instantiation
+- Conditional compilation based on generic values
+- Iterative structure creation for regular patterns
+- Hierarchical design scalability
 
-**Implementation Benefits:**
-- Compile-time hardware generation
-- Parameter-driven architecture scaling
-- Reduced manual coding errors
-- Enhanced design maintainability
+**Generate Block Syntax:**
+```verilog
+genvar i;
+generate
+    for (i = 0; i < NUM_STAGES; i = i + 1) begin : stage_gen
+        processing_unit unit_inst (
+            .clk(clk),
+            .data_in(stage_data[i]),
+            .data_out(stage_data[i+1])
+        );
+    end
+endgenerate
+```
 
 ---
 
-## 3. Practical Implementation Laboratories
+## 5. Arithmetic Circuit Construction
 
-### Laboratory 1: Incomplete Conditional Logic
+Complex arithmetic operations benefit from systematic construction approaches using iterative and generate constructs.
 
-**Verilog Implementation:**
+### Ripple Carry Adder Design Philosophy
+
+**Cascaded Full Adder Architecture:**
+- Sequential carry propagation through adder chain
+- Modular full adder component instantiation
+- Scalable bit-width implementation
+- Generate-based construction for maintainability
+
+---
+
+## 6. Laboratory Implementations
+
+### incomp_if
+
+**Incomplete Conditional Assignment:**
+
 ```verilog
-module incomplete_conditional (input enable, input data, input unused, output reg result);
+module incomp_if (input i0, input i1, input i2, output reg y);
     always @(*) begin
-        if(enable)
-            result <= data;
-        // Missing else clause creates latch
+        if(i0)
+            y <= i1;
+        // Missing else clause - creates inferred latch
     end
 endmodule
 ```
 
-**Analysis:**
-- Signal `result` retains previous value when `enable` is deasserted
-- Synthesis tool infers latch to maintain state
-- Unintended memory behavior in combinational logic
+**Analysis:** This implementation demonstrates latch inference due to incomplete signal assignment. When `i0` is deasserted, `y` retains its previous value, requiring storage capability.
 
-**GTKWave Waveform Analysis:**
-![Incomplete Conditional Waveform](placeholder-lab1-waveform.png)
+**GTKWave Simulation Results:**
+<img width="1225" height="511" alt="gtkwave_incomp_if" src="https://github.com/user-attachments/assets/1fa40c6b-e1fa-4dd7-bdd6-e294d9d03d86" />
 
-**Synthesis Output:**
-![Incomplete Conditional Synthesis](placeholder-lab1-synthesis.png)
+
+**Yosys Synthesis Output:**
+<img width="712" height="683" alt="incomp_if" src="https://github.com/user-attachments/assets/f41302af-4ed0-4b60-8851-ed8629d5fb76" />
 
 ---
 
-### Laboratory 2: Nested Conditional Structures
+### incomp_if2
 
-**Verilog Implementation:**
+**Nested Incomplete Conditionals:**
+
 ```verilog
-module nested_conditional (input sel1, input data1, input sel2, input data2, output reg output_signal);
+module incomp_if2 (input i0, input i1, input i2, input i3, output reg y);
     always @(*) begin
-        if(sel1)
-            output_signal <= data1;
-        else if (sel2)
-            output_signal <= data2;
-        // Missing final else creates latch
+        if(i0)
+            y <= i1;
+        else if (i2)
+            y <= i3;
+        // No final else - creates latch for unspecified conditions
     end
 endmodule
 ```
 
-**Behavioral Analysis:**
-- Priority encoder with incomplete specification
-- Latch inference when both selectors are inactive
-- Demonstrates cascaded conditional evaluation
+**Analysis:** Multiple conditional paths without complete coverage result in latch inference. The condition `~i0 & ~i2` leaves `y` unassigned.
 
-**GTKWave Waveform Analysis:**
-![Nested Conditional Waveform](placeholder-lab2-waveform.png)
+**GTKWave Simulation Results:**
+<img width="1260" height="501" alt="gtkwave_incomp_if2" src="https://github.com/user-attachments/assets/b1943e48-6d3e-4974-9490-14c09d06f3b1" />
 
-**Synthesis Output:**
-![Nested Conditional Synthesis](placeholder-lab2-synthesis.png)
+
+**Yosys Synthesis Output:**
+<img width="1230" height="382" alt="incomp_if2" src="https://github.com/user-attachments/assets/73d7b617-34c4-4cf8-bed4-07b822c635f4" />
+
 
 ---
 
-### Laboratory 3: Defective Case Implementation
+### bad_case
 
-**Verilog Implementation:**
+**Case Statement with Wildcards:**
+
 ```verilog
-module defective_case (input data0, input data1, input data2, input data3, input [1:0] selector, output reg result);
+module bad_case (input i0, input i1, input i2, input i3, input [1:0] sel, output reg y);
     always @(*) begin
-        case(selector)
-            2'b00: result = data0;
-            2'b01: result = data1;
-            2'b10: result = data2;
-            2'b1?: result = data3;  // Wildcard usage
+        case(sel)
+            2'b00: y = i0;
+            2'b01: y = i1;
+            2'b10: y = i2;
+            2'b1?: y = i3;  // Wildcard pattern - potentially problematic
         endcase
     end
 endmodule
 ```
 
-**Design Issues:**
-- Wildcard pattern `1?` covers both `10` and `11` cases
-- Potential conflicts with explicit `2'b10` assignment
-- Synthesis tool behavior may vary between implementations
+**Analysis:** Wildcard patterns can create synthesis ambiguity and unexpected behavior. Explicit case enumeration provides clearer intent.
 
-**GTKWave Waveform Analysis:**
-![Defective Case Waveform](placeholder-lab3-waveform.png)
+**GTKWave Simulation Results:**
+<img width="1281" height="551" alt="gtkwave_bad_case" src="https://github.com/user-attachments/assets/f77a2103-28cf-4f87-aa14-03cac251f054" />
 
-**Synthesis Output:**
-![Defective Case Synthesis](placeholder-lab3-synthesis.png)
+
+**Yosys Synthesis Output:**
+<img width="1192" height="662" alt="bad_case" src="https://github.com/user-attachments/assets/da339bf2-1954-45ca-8c28-635539dea17c" />
+
 
 ---
 
-### Laboratory 4: Complete Case Design
+### comp_case
 
-**Verilog Implementation:**
+**Complete Case Statement Implementation:**
+
 ```verilog
-module complete_case_mux (input input0, input input1, input input2, input [1:0] select, output reg output_mux);
+module comp_case (input i0, input i1, input i2, input [1:0] sel, output reg y);
     always @(*) begin
-        case(select)
-            2'b00 : output_mux = input0;
-            2'b01 : output_mux = input1;
-            default : output_mux = input2;
+        case(sel)
+            2'b00 : y = i0;
+            2'b01 : y = i1;
+            default : y = i2;  // Ensures complete coverage
         endcase
     end
 endmodule
 ```
 
-**Design Advantages:**
-- Default case ensures complete specification
-- No latch inference due to comprehensive assignment
-- Clean multiplexer synthesis result
+**Analysis:** Proper case statement with default clause ensures all possible input combinations are handled, preventing latch inference.
 
-**GTKWave Waveform Analysis:**
-![Complete Case Waveform](placeholder-lab4-waveform.png)
+**GTKWave Simulation Results:**
+<img width="1217" height="622" alt="gtkwave_comp_case" src="https://github.com/user-attachments/assets/b9c405f3-a89f-4d30-833b-3a5f5cfc4aef" />
 
-**Synthesis Output:**
-![Complete Case Synthesis](placeholder-lab4-synthesis.png)
+
+**Yosys Synthesis Output:**
+<img width="1241" height="728" alt="comp_case" src="https://github.com/user-attachments/assets/1f8f828e-c00a-411d-a0bf-d34eefbffc9a" />
+
 
 ---
 
-### Laboratory 5: Demultiplexer Using Case Logic
+### demux_case
 
-**Verilog Implementation:**
+**Demultiplexer Using Case Logic:**
+
 ```verilog
-module demux_case_based (
-    output out0, out1, out2, out3, out4, out5, out6, out7,
-    input [2:0] address, input data_in
-);
-    reg [7:0] internal_outputs;
-    assign {out7,out6,out5,out4,out3,out2,out1,out0} = internal_outputs;
+module demux_case (output o0, o1, o2, o3, o4, o5, o6, o7, input [2:0] sel, input i);
+    reg [7:0]y_int;
+    assign {o7,o6,o5,o4,o3,o2,o1,o0} = y_int;
     
     always @(*) begin
-        internal_outputs = 8'b0;
-        case(address)
-            3'b000 : internal_outputs[0] = data_in;
-            3'b001 : internal_outputs[1] = data_in;
-            3'b010 : internal_outputs[2] = data_in;
-            3'b011 : internal_outputs[3] = data_in;
-            3'b100 : internal_outputs[4] = data_in;
-            3'b101 : internal_outputs[5] = data_in;
-            3'b110 : internal_outputs[6] = data_in;
-            3'b111 : internal_outputs[7] = data_in;
+        y_int = 8'b0;  // Initialize all outputs
+        case(sel)
+            3'b000 : y_int[0] = i;
+            3'b001 : y_int[1] = i;
+            3'b010 : y_int[2] = i;
+            3'b011 : y_int[3] = i;
+            3'b100 : y_int[4] = i;
+            3'b101 : y_int[5] = i;
+            3'b110 : y_int[6] = i;
+            3'b111 : y_int[7] = i;
         endcase
     end
 endmodule
 ```
 
-**Functional Description:**
-- 1-to-8 demultiplexer implementation
-- Address decoder functionality
-- Complete case coverage prevents latches
+**Analysis:** Systematic demultiplexer implementation using case statement with proper output initialization to prevent latch inference.
 
-**GTKWave Waveform Analysis:**
-![Demux Case Waveform](placeholder-lab5-waveform.png)
+**GTKWave Simulation Results:**
+<img width="1287" height="723" alt="gtkwave_demux_case" src="https://github.com/user-attachments/assets/3013f710-c861-477f-9321-15db554f2dc5" />
 
-**Synthesis Output:**
-![Demux Case Synthesis](placeholder-lab5-synthesis.png)
+
+**Yosys Synthesis Output:**
+<img width="1127" height="771" alt="demux_case" src="https://github.com/user-attachments/assets/8ea12e18-599f-406e-9da4-9485dceb323b" />
 
 ---
 
-### Laboratory 6: Loop-Based Demultiplexer
+### demux_generate
 
-**Verilog Implementation:**
+**Demultiplexer Using For Loop:**
+
 ```verilog
-module demux_loop_implementation (
-    output out0, out1, out2, out3, out4, out5, out6, out7,
-    input [2:0] channel_select, input input_data
-);
-    reg [7:0] output_register;
-    assign {out7,out6,out5,out4,out3,out2,out1,out0} = output_register;
+module demux_generate (output o0, o1, o2, o3, o4, o5, o6, o7, input [2:0] sel, input i);
+    reg [7:0]y_int;
+    assign {o7,o6,o5,o4,o3,o2,o1,o0} = y_int;
+    integer k;
     
-    integer index;
     always @(*) begin
-        output_register = 8'b0;
-        for(index = 0; index < 8; index = index + 1) begin
-            if(index == channel_select)
-                output_register[index] = input_data;
+        y_int = 8'b0;
+        for(k = 0; k < 8; k = k + 1) begin
+            if(k == sel)
+                y_int[k] = i;
         end
     end
 endmodule
 ```
 
-**Implementation Advantages:**
-- Scalable design approach
-- Reduced code repetition
-- Identical functionality to case-based version
+**Analysis:** Alternative demultiplexer implementation using for loop construct, demonstrating iterative hardware generation for regular patterns.
 
-**GTKWave Waveform Analysis:**
-![Demux Loop Waveform](placeholder-lab6-waveform.png)
+**GTKWave Simulation Results:**
+<img width="1221" height="745" alt="gtkwave_demux_generate" src="https://github.com/user-attachments/assets/832af8fb-7643-4a46-9c1d-d68d8527875f" />
 
-**Synthesis Output:**
-![Demux Loop Synthesis](placeholder-lab6-synthesis.png)
+
+**Yosys Synthesis Output:**
+<img width="1203" height="715" alt="demux_generate" src="https://github.com/user-attachments/assets/c333bc7c-4da8-4b67-b1fd-4ce2804498c2" />
+
 
 ---
 
-### Laboratory 7: Incomplete Case Structure
+### incomp_case
 
-**Verilog Implementation:**
+**Incomplete Case Coverage:**
+
 ```verilog
-module incomplete_case_structure (input in0, input in1, input in2, input [1:0] choice, output reg final_output);
+module incomp_case (input i0, input i1, input i2, input [1:0] sel, output reg y);
     always @(*) begin
-        case(choice)
-            2'b00 : final_output = in0;
-            2'b01 : final_output = in1;
-            // Missing cases 2'b10 and 2'b11
+        case(sel)
+            2'b00 : y = i0;
+            2'b01 : y = i1;
+            // Missing cases 2'b10 and 2'b11 - creates latch
         endcase
     end
 endmodule
 ```
 
-**Problem Analysis:**
-- Incomplete case specification
-- Latch inference for unspecified selector values
-- Synthesis warning generation
+**Analysis:** Demonstrates latch inference from incomplete case coverage. Missing case values result in unspecified behavior requiring memory elements.
 
-**GTKWave Waveform Analysis:**
-![Incomplete Case Waveform](placeholder-lab7-waveform.png)
+**GTKWave Simulation Results:**
+<img width="1212" height="508" alt="gtkwave_incomp_case" src="https://github.com/user-attachments/assets/9fad71ab-9f38-47fb-9f82-52c67113f25b" />
 
-**Synthesis Output:**
-![Incomplete Case Synthesis](placeholder-lab7-synthesis.png)
+
+**Yosys Synthesis Output:**
+<img width="1241" height="322" alt="incomp_case" src="https://github.com/user-attachments/assets/71fdc0a6-f571-40f6-aabf-e15308a0e416" />
+
 
 ---
 
-### Laboratory 8: Multiplexer with Loop Logic
+### mux_generate
 
-**Verilog Implementation:**
+**Multiplexer Using For Loop Implementation:**
+
 ```verilog
-module mux_loop_based (input in0, input in1, input in2, input in3, input [1:0] selection, output reg mux_output);
-    wire [3:0] input_vector;
-    assign input_vector = {in3,in2,in1,in0};
+module mux_generate (input i0, i1, i2, i3, input [1:0] sel, output reg y);
+    wire [3:0] i_int;
+    assign i_int = {i3,i2,i1,i0};
+    integer k;
     
-    integer counter;
     always @(*) begin
-        for(counter = 0; counter < 4; counter = counter + 1) begin
-            if(counter == selection)
-                mux_output = input_vector[counter];
+        for(k = 0; k < 4; k = k + 1) begin
+            if(k == sel)
+                y = i_int[k];
         end
     end
 endmodule
 ```
 
-**Design Features:**
-- Loop-based multiplexer implementation
-- Vector assignment for input organization
-- Synthesizes to standard MUX structure
+**Analysis:** Iterative multiplexer implementation showcasing for loop usage in combinational logic for systematic signal selection.
 
-**GTKWave Waveform Analysis:**
-![MUX Loop Waveform](placeholder-lab8-waveform.png)
+**GTKWave Simulation Results:**
+<img width="1250" height="753" alt="gtkwave_mux_generate" src="https://github.com/user-attachments/assets/1e1eab81-a1be-4216-bbe7-35a892ce4a31" />
 
-**Synthesis Output:**
-![MUX Loop Synthesis](placeholder-lab8-synthesis.png)
+
+**Yosys Synthesis Output:**
+<img width="1291" height="777" alt="mux_generate" src="https://github.com/user-attachments/assets/79f9d6b4-56c6-482b-bcea-19c764c96850" />
+
 
 ---
 
-### Laboratory 9: Partial Assignment Handling
+### partial_case_assign
 
-**Verilog Implementation:**
+**Partial Signal Assignment in Case:**
+
 ```verilog
-module partial_assignment_case (input in0, input in1, input in2, input [1:0] ctrl, output reg output_y, output reg output_x);
+module partial_case_assign (input i0, i1, i2, input [1:0] sel, output reg y, x);
     always @(*) begin
-        case(ctrl)
+        case(sel)
             2'b00 : begin
-                output_y = in0;
-                output_x = in2;
+                y = i0;
+                x = i2;
             end
-            2'b01 : output_y = in1;  // output_x not assigned
+            2'b01 : y = i1;  // x not assigned - creates latch for x
             default : begin
-                output_x = in1;
-                output_y = in2;
+                x = i1;
+                y = i2;
             end
         endcase
     end
 endmodule
 ```
 
-**Critical Issue:**
-- Variable `output_x` not assigned in `2'b01` case
-- Latch inference for incomplete assignment
-- Demonstrates importance of comprehensive signal assignment
+**Analysis:** Demonstrates partial assignment within case statements leading to selective latch inference. Signal `x` lacks assignment in the `2'b01` case.
 
-**GTKWave Waveform Analysis:**
-![Partial Assignment Waveform](placeholder-lab9-waveform.png)
 
-**Synthesis Output:**
-![Partial Assignment Synthesis](placeholder-lab9-synthesis.png)
+**Yosys Synthesis Output:**
+<img width="1260" height="752" alt="partial_case_assign" src="https://github.com/user-attachments/assets/a728b1b8-dff9-4bc5-9f94-d4b4fcd4a3b8" />
+
 
 ---
 
-### Laboratory 10: Ripple Carry Adder Implementation
+### rca
 
-**Verilog Implementation:**
+**Ripple Carry Adder with Generate Construct:**
+
 ```verilog
-module ripple_carry_adder (input [7:0] operand_a, input [7:0] operand_b, output [8:0] addition_result);
-    wire [7:0] intermediate_sum;
-    wire [7:0] carry_chain;
+module rca (input [7:0] num1, num2, output [8:0] sum);
+    wire [7:0] int_sum;
+    wire [7:0] int_co;
 
-    genvar bit_position;
+    genvar i;
     generate
-        for (bit_position = 1; bit_position < 8; bit_position = bit_position + 1) begin: adder_chain
-            full_adder fa_instance (
-                .a(operand_a[bit_position]),
-                .b(operand_b[bit_position]),
-                .cin(carry_chain[bit_position-1]),
-                .cout(carry_chain[bit_position]),
-                .sum(intermediate_sum[bit_position])
-            );
+        for (i = 1; i < 8; i = i + 1) begin
+            fa u_fa_1 (.a(num1[i]), .b(num2[i]), .c(int_co[i-1]), 
+                       .co(int_co[i]), .sum(int_sum[i]));
         end
     endgenerate
+    
+    fa u_fa_0 (.a(num1[0]), .b(num2[0]), .c(1'b0), 
+               .co(int_co[0]), .sum(int_sum[0]));
 
-    full_adder fa_lsb (
-        .a(operand_a[0]),
-        .b(operand_b[0]),
-        .cin(1'b0),
-        .cout(carry_chain[0]),
-        .sum(intermediate_sum[0])
-    );
-
-    assign addition_result[7:0] = intermediate_sum;
-    assign addition_result[8] = carry_chain[7];
+    assign sum[7:0] = int_sum;
+    assign sum[8] = int_co[7];
 endmodule
 
-// Full Adder Component Module
-module full_adder (input a, input b, input cin, output cout, output sum);
-    assign {cout, sum} = a + b + cin;
+// Full Adder Implementation
+module fa (input a, b, c, output co, sum);
+    assign {co,sum} = a + b + c;
 endmodule
 ```
 
-**Architecture Analysis:**
-- Generate block creates parameterizable adder chain
-- Full adder instantiation for each bit position
-- Carry propagation through intermediate signals
+**Analysis:** Scalable arithmetic circuit implementation using generate constructs for systematic full adder instantiation with proper carry chain connectivity.
 
-**GTKWave Waveform Analysis:**
-![RCA Waveform](placeholder-lab10-waveform.png)
+**GTKWave Simulation Results:**
 
-**Synthesis Output:**
-![RCA Synthesis](placeholder-lab10-synthesis.png)
+<img width="1202" height="492" alt="gtkwave_rca" src="https://github.com/user-attachments/assets/62075621-3e2b-4bbb-9bf1-5d88cc99be54" />
+
+**Yosys Synthesis Output:**
+
+<img width="1223" height="712" alt="rca" src="https://github.com/user-attachments/assets/1b0e195a-ee02-4d3f-a009-43f564202b99" />
+
+**Full Adder Synthesis Output:**
+
+<img width="1088" height="725" alt="fa" src="https://github.com/user-attachments/assets/3384f854-2b07-4f30-9b36-0ae95e599d5e" />
+
 
 ---
 
-## 4. Design Best Practices
+## 7. Synthesis Optimization Strategies
 
-### Synthesis-Friendly Coding Guidelines
+### Advanced Optimization Techniques
 
-**Latch Prevention:**
-- Always provide complete signal assignments
-- Use default cases in all case statements
-- Include else clauses for all if statements
+**Constant Propagation and Logic Reduction:**
+- Eliminates redundant logic when signals maintain constant values
+- Boolean algebraic simplification reduces gate count
+- Dead code elimination removes unreachable logic paths
 
-**Loop Implementation:**
-- Ensure fixed iteration counts at synthesis time
-- Use generate blocks for hardware replication
-- Avoid dynamic loop bounds in always blocks
+**Resource Sharing and Area Optimization:**
+- Multiplexer-based resource sharing for arithmetic units
+- State encoding optimization for finite state machines
+- Clock gating implementation for power reduction
 
-**Code Organization:**
-- Separate combinational and sequential logic blocks
-- Use meaningful signal and module names
-- Document complex conditional logic structures
+**Timing-Driven Optimization:**
+- Critical path identification and optimization
+- Register retiming for performance enhancement
+- Pipeline stage balancing for throughput maximization
 
-### Performance Optimization Strategies
+### Verification and Validation Guidelines
 
-**Area Optimization:**
-- Minimize redundant logic through proper case analysis
-- Use efficient multiplexer structures
-- Avoid unnecessary signal width expansion
+**Synthesis Verification Flow:**
+- Compare RTL simulation with gate-level simulation
+- Verify timing constraints satisfaction
+- Validate power consumption estimates
+- Confirm area and resource utilization targets
 
-**Timing Optimization:**
-- Balance logic depth in conditional paths
-- Consider priority vs. parallel case implementation
-- Optimize critical path delays
+---
+
+## Key Design Principles
+
+- **Complete Assignment Coverage:** Ensure all signals are assigned in every execution path
+- **Synthesizable Constructs:** Use only synthesis-supported language features
+- **Modular Design:** Implement scalable, parametrizable architectures
+- **Optimization Awareness:** Write code that enables effective synthesis optimization
+- **Verification Integration:** Design with testability and verification in mind
 
 ---
 
 ## Terminal Command Reference
 
-### Complete Simulation and Synthesis Flow
+### Complete Design Flow
 
 ```bash
-# Compile and simulate design
+# RTL Simulation
 iverilog <design>.v <testbench>.v
 ./a.out
 gtkwave <design>.vcd
 
-# Yosys synthesis workflow
+# Synthesis Flow
 yosys
-read_liberty -lib sky130_fd_sc_hd__tt_025C_1v80.lib
+read_liberty -lib <library_path>/sky130_fd_sc_hd__tt_025C_1v80.lib
 read_verilog <design>.v
 synth -top <module_name>
 opt_clean -purge
-abc -liberty sky130_fd_sc_hd__tt_025C_1v80.lib
+dfflibmap -liberty <library_path>/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty <library_path>/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
-write_verilog <netlist>.v
+write_verilog <optimized_netlist>.v
 ```
 
 ---
-
-## Key Learning Outcomes
-
-**Conditional Logic Mastery:** Understanding proper implementation of if-else and case constructs without creating unintended latches
-
-**Loop-Based Design:** Proficiency in using for loops and generate blocks for scalable hardware description
-
-**Synthesis Awareness:** Recognition of how RTL constructs map to actual hardware implementations
-
-**Best Practice Integration:** Application of coding standards that ensure synthesizable and efficient designs
-
 ---
-
-*"The path of the righteous designer is beset by timing violations and poor optimization."*
+*"The first rule of RTL Design: You do optimize your logic."*
