@@ -375,3 +375,6 @@ Through hands-on laboratory exercises, we explored real-world scenarios and lear
 ---
 
 > **Important Note:** Always validate your designs through multiple simulation phases and carefully review synthesis reports to ensure reliable hardware implementation.
+---
+*"The path of the righteous designer is beset by timing violations and poor optimization."*
+
