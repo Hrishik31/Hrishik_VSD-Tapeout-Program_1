@@ -205,4 +205,5 @@ Let's synthesize our `good_mux` design using the Yosys synthesis engine!
 ---
 
 
-*Happy Designing! 🎛️⚡*
+
+*"Hope is a good thing, maybe the best of things in RTL design. And good code never dies."*
