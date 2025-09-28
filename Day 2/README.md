@@ -1,5 +1,10 @@
 # Day 2: Timing Libraries, Synthesis Methodologies, and Sequential Logic Design
 
+[![RISC-V](https://img.shields.io/badge/RISC--V-Digital%20Design-blue?style=for-the-badge&logo=riscv)](https://riscv.org/)
+[![Workshop](https://img.shields.io/badge/RTL-Workshop-orange?style=for-the-badge)](https://vsdiat.vlsisystemdesign.com/)
+![Day](https://img.shields.io/badge/Day-2-green?style=for-the-badge)
+
+
 Welcome to **Day 2** of the RTL Design Workshop! This comprehensive session explores three fundamental aspects of digital design:
 - Deep-dive into `.lib` timing libraries (sky130_fd_sc_hd__tt_025C_1v80.lib) from open-source Process Design Kits
 - Comparative analysis of hierarchical versus flat synthesis approaches  
