@@ -645,4 +645,4 @@ These optimization techniques form the foundation for:
 
 ---
 
-*"I don't get lucky. I make my own luck... and my own netlists."* ⚡🎛️
+*"By order of the Synthesis Blinders, your logic gates are now optimized."*
