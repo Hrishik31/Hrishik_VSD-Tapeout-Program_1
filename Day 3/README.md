@@ -1,5 +1,9 @@
 # Day 3: Digital Circuit Optimization - Combinational & Sequential Enhancement Techniques
 
+[![RISC-V](https://img.shields.io/badge/RISC--V-Digital%20Design-blue?style=for-the-badge&logo=riscv)](https://riscv.org/)
+[![Workshop](https://img.shields.io/badge/RTL-Workshop-orange?style=for-the-badge)](https://vsdiat.vlsisystemdesign.com/)
+![Day](https://img.shields.io/badge/Day-3-green?style=for-the-badge)
+
 Welcome to **Day 3** of the RTL Design Workshop! This session focuses on advanced optimization strategies for both combinational and sequential digital circuits, exploring techniques that enhance performance, reduce area, and improve power efficiency in VLSI design.
 
 ---
